@@ -1,24 +1,18 @@
 class Cell {
+    private universe: Universe 
     private value: number
     private newValue: number
     private hasChanged: boolean
-    private x: number
-    private y: number
-    
-    constructor(x: number, y: number) {
+
+    constructor(universe: Universe) {
+        this.universe = universe
         this.value = 0
         this.newValue = 0
         this.hasChanged = false
-        this.x = x
-        this.y = y
     }
-    
-    getX(): number {
-        return this.x
-    }
-    
-    getY(): number {
-        return this.y
+
+    getNeighbours(): Array<Cell> {
+        return this.universe.getNeighbours(this)
     }
 
     private setValue(v: number) {
@@ -44,34 +38,62 @@ class Cell {
     getHasChanged() {
         return this.hasChanged
     }
-    
 }
 
-class Grid2D {
-    private cells: Array<Cell>
+class Cell2D extends Cell {
+
+    private x: number
+    private y: number
+
+    
+    constructor(universe: Universe, x: number, y: number) {
+        super(universe)
+        this.x = x
+        this.y = y
+    }
+    
+    getX(): number {
+        return this.x
+    }
+    
+    getY(): number {
+        return this.y
+    }
+}
+
+interface Universe {
+    getNeighbours(cell: Cell): Array<Cell>
+}
+
+class Grid2D implements Universe {
+    private cells: Array<Cell2D>
     
     constructor(width: number, height: number) {
         this.cells = []
         for (var x = 0; x < width; x++) {
             for (var y = 0; y < height; y++) {
-                this.cells.push(new Cell(x, y))
+                this.cells.push(new Cell2D(this, x, y))
             }
         }
     }
 
-    getCell(x: number, y: number) {
+    getCell(x: number, y: number): Cell2D {
         return this.cells[x*y]
     }
 
-    getCells(): Array<Cell> {
+    getCells(): Array<Cell2D> {
         return this.cells
+    }
+
+    getNeighbours(cell: Cell2D): Array<Cell2D> {
+        return null
     }
 
 }
 
 
 
-class CellularAutomat {
+class CellularAutomat2D {
     canvas: HTMLCanvasElement
     context: CanvasRenderingContext2D
 
@@ -104,5 +126,5 @@ class CellularAutomat {
     }
 }
 
-let ca = new CellularAutomat()
+let ca = new CellularAutomat2D()
 ca.run()
