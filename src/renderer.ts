@@ -65,8 +65,10 @@ interface Universe {
     getNeighbours(cell: Cell): Array<Cell>
 }
 
-class Grid2D implements Universe {
+class Endless2DUniverse implements Universe {
     private cells: Array<Cell2D>
+    width: number
+    height: number
     
     constructor(width: number, height: number) {
         this.cells = []
@@ -75,10 +77,22 @@ class Grid2D implements Universe {
                 this.cells.push(new Cell2D(this, x, y))
             }
         }
+        this.width = width
+        this.height = height
+    }
+
+    private cycle(v: number, max: number): number {
+        if (v < max) {
+            return v
+        }
+        return v % max
     }
 
     getCell(x: number, y: number): Cell2D {
-        return this.cells[x*y]
+        const cx = this.cycle(x, this.width)
+        const cy = this.cycle(y, this.height)
+        const i = cx + cy * this.width
+        return this.cells[i]
     }
 
     getCells(): Array<Cell2D> {
@@ -92,7 +106,6 @@ class Grid2D implements Universe {
 }
 
 
-
 class CellularAutomat2D {
     canvas: HTMLCanvasElement
     context: CanvasRenderingContext2D
@@ -103,10 +116,10 @@ class CellularAutomat2D {
     }
 
     run() {
-        const grid = new Grid2D(20, 20)
-        grid.getCell(2,3).setNewValue(1).copyNewValueToValue()
-        grid.getCell(12,5).setNewValue(1).copyNewValueToValue()
-        grid.getCell(9,9).setNewValue(1).copyNewValueToValue()
+        const grid = new Endless2DUniverse(20, 20)
+        grid.getCell(0,0).setNewValue(1).copyNewValueToValue()
+        grid.getCell(1,1).setNewValue(1).copyNewValueToValue()
+        grid.getCell(2,2).setNewValue(1).copyNewValueToValue()
 
         const size = 10
         for (var c of grid.getCells()) {

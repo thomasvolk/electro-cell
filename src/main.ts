@@ -13,6 +13,9 @@ function createWindow() {
     width: 800,
   });
 
+  // Open the DevTools.
+  mainWindow.webContents.openDevTools();
+
   mainWindow.loadFile(path.join(__dirname, "../index.html"));
 }
 
