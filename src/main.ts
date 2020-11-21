@@ -18,7 +18,7 @@ function createWindow() {
   }
   var index = "../index.html"
   if (app.commandLine.hasSwitch('test')) {
-    index = "../test.html"
+    index = "../tests/tests.html"
   }
   mainWindow.loadFile(path.join(__dirname, index));
 }

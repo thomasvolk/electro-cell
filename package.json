@@ -6,7 +6,7 @@
     "build": "tsc",
     "watch": "tsc -w",
     "lint": "eslint -c .eslintrc --ext .ts ./src",
-    "test": "npm run build && electron ./dist/main.js --test",
+    "test": "npm run build && electron ./dist/main.js --test --dev-tools",
     "start": "npm run build && electron ./dist/main.js"
   },
   "repository": "https://github.com/thomasvolk/electro-cell",

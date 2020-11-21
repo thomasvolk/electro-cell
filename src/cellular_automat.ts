@@ -81,7 +81,7 @@ class Endless2DUniverse implements Universe {
         this.height = height
     }
 
-    private cycle(v: number, max: number): number {
+    static cycle(v: number, max: number): number {
         if (v < max) {
             return v
         }
@@ -89,8 +89,8 @@ class Endless2DUniverse implements Universe {
     }
 
     getCell(x: number, y: number): Cell2D {
-        const cx = this.cycle(x, this.width)
-        const cy = this.cycle(y, this.height)
+        const cx = Endless2DUniverse.cycle(x, this.width)
+        const cy = Endless2DUniverse.cycle(y, this.height)
         const i = cx + cy * this.width
         return this.cells[i]
     }
