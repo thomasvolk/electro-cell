@@ -13,10 +13,14 @@ function createWindow() {
     width: 800,
   });
 
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools();
-
-  mainWindow.loadFile(path.join(__dirname, "../index.html"));
+  if (app.commandLine.hasSwitch('dev-tools')) {
+    mainWindow.webContents.openDevTools();
+  }
+  var index = "../index.html"
+  if (app.commandLine.hasSwitch('test')) {
+    index = "../test.html"
+  }
+  mainWindow.loadFile(path.join(__dirname, index));
 }
 
 // This method will be called when Electron has finished
