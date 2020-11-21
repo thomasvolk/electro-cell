@@ -11,9 +11,9 @@ class CellularAutomat2D {
 
     run() {
         const grid = new Endless2DUniverse(20, 20)
-        grid.getCell(0,0).setNewValue(1).copyNewValueToValue()
-        grid.getCell(1,1).setNewValue(1).copyNewValueToValue()
-        grid.getCell(2,2).setNewValue(1).copyNewValueToValue()
+        grid.getCell(0,0).enterValue(1).apply()
+        grid.getCell(1,1).enterValue(1).apply()
+        grid.getCell(2,2).enterValue(1).apply()
 
         const size = 10
         for (var c of grid.getCells()) {
