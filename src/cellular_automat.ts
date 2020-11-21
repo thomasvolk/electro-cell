@@ -26,12 +26,12 @@ class Cell {
         return this.value
     }
 
-    setNewValue(v: number): Cell {
+    enterValue(v: number): Cell {
         this.newValue = v
         return this
     }
 
-    copyNewValueToValue() {
+    apply() {
         this.setValue(this.newValue)
     }
 
@@ -99,8 +99,16 @@ class Endless2DUniverse implements Universe {
         return this.cells
     }
 
-    getNeighbours(cell: Cell2D): Array<Cell2D> {
-        return null
+    getNeighbours(cell: Cell2D): Array<Cell> {
+        const x = cell.getX()
+        const y = cell.getY()
+        const neighbours = new Array<Cell>()
+        for (var nx=-1; nx < 2; nx++) {
+            for (var ny=-1; ny < 2; ny++) {
+                neighbours.push(this.getCell(x + nx, y + ny))
+            }
+        }
+        return neighbours
     }
 
 }
