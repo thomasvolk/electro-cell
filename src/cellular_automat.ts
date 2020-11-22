@@ -125,3 +125,19 @@ abstract class EvolutionAlgorithm<C extends Cell> {
 
     abstract calculateNewValue(neighbourValues: Array<number>): number
 }
+
+class ConwayAlgorithm<C extends Cell> extends EvolutionAlgorithm<C> {
+    static normalizeValuesOneOrZero(values: Array<number>): Array<number> {
+        return values.map(v => {
+            if (v > 0) return 1
+            else return 0
+        })
+    }
+
+    calculateNewValue(neighbourValues: Array<number>): number {
+        const normalizedValues = ConwayAlgorithm.normalizeValuesOneOrZero(neighbourValues)
+        const neighbourSum = normalizedValues.reduce((sum, current) => sum + current, 0)
+        if (neighbourSum < 2 || neighbourSum > 3) return 0
+        return 1
+    }
+}

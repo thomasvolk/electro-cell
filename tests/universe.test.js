@@ -20,5 +20,11 @@ QUnit.module('Endless2DUniverse', function() {
         const c_10_10 = u.getCell(10, 10)
         const n_10_10 = u.getNeighbours(c_10_10)
         assert.equal(n_10_10.length, 9, 'neighbours.length = 9')
+        assert.equal(n_10_10[0].getX(), 9, 'neighbour[0].x = 9')
+        assert.equal(n_10_10[0].getY(), 9, 'neighbour[0].y = 9')
+        assert.equal(n_10_10[3].getX(), 9, 'neighbour[3].x = 9')
+        assert.equal(n_10_10[3].getY(), 10, 'neighbour[3].y = 10')
+        assert.equal(n_10_10[8].getX(), 11, 'neighbour[8].x = 11')
+        assert.equal(n_10_10[8].getY(), 11, 'neighbour[8].y = 11')
     })
 });
