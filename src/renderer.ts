@@ -1,22 +1,24 @@
 
 
 class CellularAutomat2D {
-    canvas: HTMLCanvasElement
-    context: CanvasRenderingContext2D
-    cellSize: number
-    width: number
-    height: number
-    interationIntervall: number
+    private canvas: HTMLCanvasElement
+    private context: CanvasRenderingContext2D
+    private cellSize: number
+    private width: number
+    private height: number
+    private interationIntervall: number
+    private interval: any
+    private universe: Endless2DUniverse
 
-    constructor(width: number, height: number, cellSize: number = 10, interationIntervall = 100) {
+    constructor(width: number, height: number, interationIntervall = 100) {
         this.canvas = document.getElementById('canvas') as HTMLCanvasElement
-        this.canvas.height = height * cellSize
-        this.canvas.width = width * cellSize
+        this.cellSize = Math.round(Math.min(this.canvas.height, this.canvas.width) / Math.max(width, height))
         this.context = this.canvas.getContext("2d") as CanvasRenderingContext2D
-        this.cellSize = cellSize
         this.width = width
         this.height = height
         this.interationIntervall = interationIntervall
+        this.interval = null
+        this.universe = new Endless2DUniverse(this.width, this.height)
     }
 
     draw<C extends Cell2D>(universe: Universe<C>) {
@@ -37,24 +39,48 @@ class CellularAutomat2D {
         }
     }
 
-    run() {
-        const universe = new Endless2DUniverse(this.width, this.height)
-        universe.getCell(10,10).enterValue(1).apply()
-        universe.getCell(11,10).enterValue(1).apply()
-        universe.getCell(12,10).enterValue(1).apply()
-        universe.getCell(12,11).enterValue(1).apply()
-        universe.getCell(11,12).enterValue(1).apply()
+    activateCell(x: number, y: number) {
+        this.universe.getCell(x, y).enterValue(1).apply()
+    }
+    
 
-        this.draw(universe)
-
-        const conway = new ConwayAlgorithm<Cell2D>(universe)
-        setInterval(()=> { 
-            this.draw(universe)
+    start() {
+        const conway = new ConwayAlgorithm<Cell2D>(this.universe)
+        this.interval = setInterval(()=> { 
+            this.draw(this.universe)
             conway.iterate()
          }, this.interationIntervall);
+    }
+
+    stop() {
+        clearInterval(this.interval)
+        this.interval = null
+    }
+
+    isRunning(): boolean {
+        return this.interval != null
     }
 }
 
 
-let ca = new CellularAutomat2D(80, 60)
-ca.run()
+let ca = new CellularAutomat2D(80, 60, 1)
+ca.activateCell(10, 10)
+ca.activateCell(11, 10)
+ca.activateCell(12, 10)
+ca.activateCell(12, 11)
+ca.activateCell(11, 12)
+
+let toggleButton = document.getElementById('toggle-button')
+
+function toggle() {
+    if(ca.isRunning()) {
+        ca.stop()
+        toggleButton.textContent = "Start"
+    }
+    else {
+        ca.start()
+        toggleButton.textContent = "Stop"
+    }
+}
+
+toggleButton.addEventListener('click', toggle)
