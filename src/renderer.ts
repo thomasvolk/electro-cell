@@ -6,13 +6,15 @@ class CellularAutomat2D {
     cellSize: number
     width: number
     height: number
+    interationIntervall: number
 
-    constructor(width: number, height: number, cellSize: number = 10) {
+    constructor(width: number, height: number, cellSize: number = 10, interationIntervall = 100) {
         this.canvas = document.getElementById('canvas') as HTMLCanvasElement
         this.context = this.canvas.getContext("2d") as CanvasRenderingContext2D
         this.cellSize = cellSize
         this.width = width
         this.height = height
+        this.interationIntervall = interationIntervall
     }
 
     draw<C extends Cell2D>(universe: Universe<C>) {
@@ -34,21 +36,22 @@ class CellularAutomat2D {
     }
 
     run() {
-        const universe = new Endless2DUniverse(20, 20)
+        const universe = new Endless2DUniverse(this.width, this.height)
         universe.getCell(0,0).enterValue(1).apply()
         universe.getCell(1,1).enterValue(1).apply()
         universe.getCell(1,0).enterValue(1).apply()
         universe.getCell(2,2).enterValue(1).apply()
         universe.getCell(2,3).enterValue(1).apply()
-        
+        this.draw(universe)
+
         const conway = new ConwayAlgorithm<Cell2D>(universe)
-        while(true) {
+        setInterval(()=> { 
             this.draw(universe)
             conway.iterate()
-        }
+         }, this.interationIntervall);
     }
 }
 
 
-let ca = new CellularAutomat2D(20, 20)
+let ca = new CellularAutomat2D(100, 100)
 ca.run()
