@@ -58,16 +58,18 @@ QUnit.module('ConwayAlgorithm', function() {
             'normalizeToOneOrZero([5, 0.7, 0, 1, -1, 0] = [1,1,0,1,0,0]')
     })
     QUnit.test('rules', function(assert) {
-        assert.equal(ConwayAlgorithm.calculateCellValue([5, 0.7, 0, 1, -1, 0, 0, 0, 0]), 1, 
-            'calculateCellValue([5, 0.7, 0, 1, -1, 0, 0, 0, 0] = 1')
+        assert.equal(ConwayAlgorithm.calculateCellValue(0, [5, 0.7, 0, 1, -1, 0, 0, 0, 0]), 1, 
+            'calculateCellValue(0, [5, 0.7, 0, 1, -1, 0, 0, 0, 0] = 1')
         
-        assert.equal(ConwayAlgorithm.calculateCellValue([1, 1, 0, 0, 0, 0]), 1, 
-            'calculateCellValue([1, 1, 0, 0, 0, 0, 0, 0, 0] = 1')
-        assert.equal(ConwayAlgorithm.calculateCellValue([1, 1, 1, 0, 0, 0]), 1, 
-            'calculateCellValue([1, 1, 1, 0, 0, 0, 0, 0, 0] = 1')
-        assert.equal(ConwayAlgorithm.calculateCellValue([1, 1, 1, 1, 0, 0]), 0, 
-            'calculateCellValue([1, 1, 1, 1, 0, 0, 0, 0, 0] = 0')
-        assert.equal(ConwayAlgorithm.calculateCellValue([1, 0, 0, 0, 0, 0]), 0, 
-            'calculateCellValue([1, 0, 0, 0, 0, 0, 0, 0, 0] = 0')
+        assert.equal(ConwayAlgorithm.calculateCellValue(1, [1, 1, 0, 0, 0, 0]), 1, 
+            'calculateCellValue(1, [1, 1, 0, 0, 0, 0, 0, 0, 0] = 1')
+        assert.equal(ConwayAlgorithm.calculateCellValue(0, [1, 1, 0, 0, 0, 0]), 0, 
+            'calculateCellValue(0, [1, 1, 0, 0, 0, 0, 0, 0, 0] = 0')
+        assert.equal(ConwayAlgorithm.calculateCellValue(0, [1, 1, 1, 0, 0, 0]), 1, 
+            'calculateCellValue(0, [1, 1, 1, 0, 0, 0, 0, 0, 0] = 1')
+        assert.equal(ConwayAlgorithm.calculateCellValue(1, [1, 1, 1, 1, 0, 0]), 0, 
+            'calculateCellValue(1, [1, 1, 1, 1, 0, 0, 0, 0, 0] = 0')
+        assert.equal(ConwayAlgorithm.calculateCellValue(1, [1, 0, 0, 0, 0, 0]), 0, 
+            'calculateCellValue(1, [1, 0, 0, 0, 0, 0, 0, 0, 0] = 0')
     })
 })
