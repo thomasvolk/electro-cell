@@ -125,13 +125,13 @@ abstract class EvolutionAlgorithm<C extends Cell> {
     iterate() {
         this.universe.getCells().forEach(cell => {
             const neighbours = this.universe.getNeighbours(cell)
-            const newValue = this.calculateNewValue(neighbours.map(c => c.getValue()))
+            const newValue = this.calculateNewValue(cell.getValue(), neighbours.map(c => c.getValue()))
             cell.enterValue(newValue)
         })
         this.universe.getCells().forEach(c => c.apply())
     }
 
-    protected abstract calculateNewValue(neighbourValues: Array<number>): number
+    protected abstract calculateNewValue(cellValue: number, neighbourValues: Array<number>): number
 }
 
 class ConwayAlgorithm<C extends Cell> extends EvolutionAlgorithm<C> {
@@ -142,14 +142,16 @@ class ConwayAlgorithm<C extends Cell> extends EvolutionAlgorithm<C> {
         })
     }
 
-    static calculateCellValue(neighbourValues: Array<number>): number {
+    static calculateCellValue(cellValue: number, neighbourValues: Array<number>): number {
         const normalizedValues = ConwayAlgorithm.normalizeToOneOrZero(neighbourValues)
         const neighbourSum = normalizedValues.reduce((sum, current) => sum + current, 0)
         if (neighbourSum < 2 || neighbourSum > 3) return 0
-        return 1
+        if (cellValue > 0) return 1
+        if (cellValue == 0 && neighbourSum == 3) return 1
+        return 0
     }
 
-    protected calculateNewValue(neighbourValues: Array<number>): number {
-        return ConwayAlgorithm.calculateCellValue(neighbourValues)
+    protected calculateNewValue(cellValue: number, neighbourValues: Array<number>): number {
+        return ConwayAlgorithm.calculateCellValue(cellValue, neighbourValues)
     }
 }
