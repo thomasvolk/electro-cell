@@ -17,7 +17,8 @@ QUnit.module('Endless2DUniverse', function() {
     })
     QUnit.test('neighbours', function(assert) {
         const u = new Endless2DUniverse(20, 20)
-        const n_10_10 = u.getCell(10, 10).getNeighbours()
+        const c_10_10 = u.getCell(10, 10)
+        const n_10_10 = u.getNeighbours(c_10_10)
         assert.equal(n_10_10.length, 9, 'neighbours.length = 9')
     })
 });

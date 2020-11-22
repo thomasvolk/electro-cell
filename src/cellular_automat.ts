@@ -1,18 +1,12 @@
 class Cell {
-    private universe: Universe 
     private value: number
     private newValue: number
     private hasChanged: boolean
 
-    constructor(universe: Universe) {
-        this.universe = universe
+    constructor() {
         this.value = 0
         this.newValue = 0
         this.hasChanged = false
-    }
-
-    getNeighbours(): Array<Cell> {
-        return this.universe.getNeighbours(this)
     }
 
     private setValue(v: number) {
@@ -22,7 +16,7 @@ class Cell {
         }
     }
 
-    getValue() {
+    getValue(): number {
         return this.value
     }
 
@@ -46,8 +40,8 @@ class Cell2D extends Cell {
     private y: number
 
     
-    constructor(universe: Universe, x: number, y: number) {
-        super(universe)
+    constructor(x: number, y: number) {
+        super()
         this.x = x
         this.y = y
     }
@@ -61,11 +55,12 @@ class Cell2D extends Cell {
     }
 }
 
-interface Universe {
-    getNeighbours(cell: Cell): Array<Cell>
+interface Universe<C> {
+    getNeighbours(cell: C): Array<C>
+    getCells(): Array<C>
 }
 
-class Endless2DUniverse implements Universe {
+class Endless2DUniverse implements Universe<Cell2D> {
     private cells: Array<Cell2D>
     width: number
     height: number
@@ -74,7 +69,7 @@ class Endless2DUniverse implements Universe {
         this.cells = []
         for (var x = 0; x < width; x++) {
             for (var y = 0; y < height; y++) {
-                this.cells.push(new Cell2D(this, x, y))
+                this.cells.push(new Cell2D(x, y))
             }
         }
         this.width = width
@@ -99,10 +94,10 @@ class Endless2DUniverse implements Universe {
         return this.cells
     }
 
-    getNeighbours(cell: Cell2D): Array<Cell> {
+    getNeighbours(cell: Cell2D): Array<Cell2D> {
         const x = cell.getX()
         const y = cell.getY()
-        const neighbours = new Array<Cell>()
+        const neighbours = new Array<Cell2D>()
         for (var nx=-1; nx < 2; nx++) {
             for (var ny=-1; ny < 2; ny++) {
                 neighbours.push(this.getCell(x + nx, y + ny))
@@ -113,3 +108,20 @@ class Endless2DUniverse implements Universe {
 
 }
 
+
+abstract class EvolutionAlgorithm<C extends Cell> {
+    private universe: Universe<C>
+
+    constructor(universe: Universe<C>) {
+        this.universe = universe
+    }
+
+    iterate() {
+        this.universe.getCells().forEach(cell => {
+            const neighbours = this.universe.getNeighbours(cell)
+            const newValue = this.calculateNewValue(neighbours.map(c => c.getValue()))
+        });
+    }
+
+    abstract calculateNewValue(neighbourValues: Array<number>): number
+}
