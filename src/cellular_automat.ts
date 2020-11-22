@@ -28,6 +28,12 @@ class Cell {
         }
     }
 
+    reset() {
+        this.value = 0
+        this.newValue = 0
+        this.hasChanged = true
+    }
+
     getHasChanged() {
         return this.hasChanged
     }
@@ -61,6 +67,10 @@ abstract class Universe<C extends Cell> {
     
     getValue(): number {
         return this.getCells().reduce((sum, cell) => sum + cell.getValue(), 0)
+    }
+
+    reset() {
+        this.getCells().forEach(c => c.reset())
     }
 }
 
