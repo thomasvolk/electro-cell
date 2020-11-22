@@ -39,6 +39,8 @@ class CellularAutomat2D {
         universe.getCell(1,1).enterValue(1).apply()
         universe.getCell(1,0).enterValue(1).apply()
         universe.getCell(2,2).enterValue(1).apply()
+        universe.getCell(2,3).enterValue(1).apply()
+        
         const conway = new ConwayAlgorithm<Cell2D>(universe)
         while(true) {
             this.draw(universe)

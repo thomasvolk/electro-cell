@@ -54,20 +54,26 @@ class Cell2D extends Cell {
     }
 }
 
-interface Universe<C> {
-    getNeighbours(cell: C): Array<C>
-    getCells(): Array<C>
+abstract class Universe<C extends Cell> {
+    abstract getNeighbours(cell: C): Array<C>
+    
+    abstract getCells(): Array<C>
+    
+    getValue(): number {
+        return this.getCells().reduce((sum, cell) => sum + cell.getValue(), 0)
+    }
 }
 
-class Endless2DUniverse implements Universe<Cell2D> {
+class Endless2DUniverse extends Universe<Cell2D> {
     private cells: Array<Cell2D>
     width: number
     height: number
     
     constructor(width: number, height: number) {
+        super()
         this.cells = []
-        for (var x = 0; x < width; x++) {
-            for (var y = 0; y < height; y++) {
+        for (var y = 0; y < height; y++) {
+            for (var x = 0; x < width; x++) {
                 this.cells.push(new Cell2D(x, y))
             }
         }
@@ -76,6 +82,9 @@ class Endless2DUniverse implements Universe<Cell2D> {
     }
 
     static cycle(v: number, max: number): number {
+        if (v < 0) {
+            return max + (v % max)
+        }
         if (v < max) {
             return v
         }
@@ -97,10 +106,8 @@ class Endless2DUniverse implements Universe<Cell2D> {
         const x = cell.getX()
         const y = cell.getY()
         const neighbours = new Array<Cell2D>()
-        for (var nx=-1; nx < 2; nx++) {
-            for (var ny=-1; ny < 2; ny++) {
-                neighbours.push(this.getCell(x + nx, y + ny))
-            }
+        for (var n of [[-1, -1], [0, -1], [1, -1], [-1, 0], [1, 0], [-1, 1], [0, 1], [1, 1]]) {
+            neighbours.push(this.getCell(x + n[0], y + n[1]))
         }
         return neighbours
     }
