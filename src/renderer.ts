@@ -40,8 +40,11 @@ class CellularAutomat2D {
     run() {
         const universe = new Endless2DUniverse(this.width, this.height)
         universe.getCell(10,10).enterValue(1).apply()
-        universe.getCell(11,11).enterValue(1).apply()
         universe.getCell(11,10).enterValue(1).apply()
+        universe.getCell(12,10).enterValue(1).apply()
+        universe.getCell(12,11).enterValue(1).apply()
+        universe.getCell(11,12).enterValue(1).apply()
+
         this.draw(universe)
 
         const conway = new ConwayAlgorithm<Cell2D>(universe)
