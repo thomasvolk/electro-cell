@@ -128,17 +128,21 @@ abstract class EvolutionAlgorithm<C extends Cell> {
 }
 
 class ConwayAlgorithm<C extends Cell> extends EvolutionAlgorithm<C> {
-    static normalizeValuesOneOrZero(values: Array<number>): Array<number> {
+    static normalizeToOneOrZero(values: Array<number>): Array<number> {
         return values.map(v => {
             if (v > 0) return 1
             else return 0
         })
     }
 
-    protected calculateNewValue(neighbourValues: Array<number>): number {
-        const normalizedValues = ConwayAlgorithm.normalizeValuesOneOrZero(neighbourValues)
+    static calculateCellValue(neighbourValues: Array<number>): number {
+        const normalizedValues = ConwayAlgorithm.normalizeToOneOrZero(neighbourValues)
         const neighbourSum = normalizedValues.reduce((sum, current) => sum + current, 0)
         if (neighbourSum < 2 || neighbourSum > 3) return 0
         return 1
+    }
+
+    protected calculateNewValue(neighbourValues: Array<number>): number {
+        return ConwayAlgorithm.calculateCellValue(neighbourValues)
     }
 }
