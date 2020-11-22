@@ -10,6 +10,8 @@ class CellularAutomat2D {
 
     constructor(width: number, height: number, cellSize: number = 10, interationIntervall = 100) {
         this.canvas = document.getElementById('canvas') as HTMLCanvasElement
+        this.canvas.height = height * cellSize
+        this.canvas.width = width * cellSize
         this.context = this.canvas.getContext("2d") as CanvasRenderingContext2D
         this.cellSize = cellSize
         this.width = width
@@ -37,11 +39,9 @@ class CellularAutomat2D {
 
     run() {
         const universe = new Endless2DUniverse(this.width, this.height)
-        universe.getCell(0,0).enterValue(1).apply()
-        universe.getCell(1,1).enterValue(1).apply()
-        universe.getCell(1,0).enterValue(1).apply()
-        universe.getCell(2,2).enterValue(1).apply()
-        universe.getCell(2,3).enterValue(1).apply()
+        universe.getCell(10,10).enterValue(1).apply()
+        universe.getCell(11,11).enterValue(1).apply()
+        universe.getCell(11,10).enterValue(1).apply()
         this.draw(universe)
 
         const conway = new ConwayAlgorithm<Cell2D>(universe)
@@ -53,5 +53,5 @@ class CellularAutomat2D {
 }
 
 
-let ca = new CellularAutomat2D(100, 100)
+let ca = new CellularAutomat2D(80, 60)
 ca.run()
