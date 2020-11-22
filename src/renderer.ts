@@ -3,20 +3,21 @@
 class CellularAutomat2D {
     canvas: HTMLCanvasElement
     context: CanvasRenderingContext2D
+    cellSize: number
+    width: number
+    height: number
 
-    constructor() {
+    constructor(width: number, height: number, cellSize: number = 10) {
         this.canvas = document.getElementById('canvas') as HTMLCanvasElement
         this.context = this.canvas.getContext("2d") as CanvasRenderingContext2D
+        this.cellSize = cellSize
+        this.width = width
+        this.height = height
     }
 
-    run() {
-        const grid = new Endless2DUniverse(20, 20)
-        grid.getCell(0,0).enterValue(1).apply()
-        grid.getCell(1,1).enterValue(1).apply()
-        grid.getCell(2,2).enterValue(1).apply()
-
-        const size = 10
-        for (var c of grid.getCells()) {
+    draw<C extends Cell2D>(universe: Universe<C>) {
+        const size = this.cellSize
+        for (var c of universe.getCells()) {
             if(c.getHasChanged()) {
                 if (c.getValue() > 0) {
                     this.context.fillStyle = 'black'
@@ -31,8 +32,21 @@ class CellularAutomat2D {
             }
         }
     }
+
+    run() {
+        const universe = new Endless2DUniverse(20, 20)
+        universe.getCell(0,0).enterValue(1).apply()
+        universe.getCell(1,1).enterValue(1).apply()
+        universe.getCell(1,0).enterValue(1).apply()
+        universe.getCell(2,2).enterValue(1).apply()
+        const conway = new ConwayAlgorithm<Cell2D>(universe)
+        while(true) {
+            this.draw(universe)
+            conway.iterate()
+        }
+    }
 }
 
 
-let ca = new CellularAutomat2D()
+let ca = new CellularAutomat2D(20, 20)
 ca.run()

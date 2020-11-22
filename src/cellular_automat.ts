@@ -121,7 +121,8 @@ abstract class EvolutionAlgorithm<C extends Cell> {
             const neighbours = this.universe.getNeighbours(cell)
             const newValue = this.calculateNewValue(neighbours.map(c => c.getValue()))
             cell.enterValue(newValue)
-        });
+        })
+        this.universe.getCells().forEach(Cell.apply)
     }
 
     protected abstract calculateNewValue(neighbourValues: Array<number>): number
