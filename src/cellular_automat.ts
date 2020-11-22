@@ -120,6 +120,7 @@ abstract class EvolutionAlgorithm<C extends Cell> {
         this.universe.getCells().forEach(cell => {
             const neighbours = this.universe.getNeighbours(cell)
             const newValue = this.calculateNewValue(neighbours.map(c => c.getValue()))
+            cell.enterValue(newValue)
         });
     }
 
