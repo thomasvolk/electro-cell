@@ -124,7 +124,7 @@ abstract class EvolutionAlgorithm<C extends Cell> {
         });
     }
 
-    abstract calculateNewValue(neighbourValues: Array<number>): number
+    protected abstract calculateNewValue(neighbourValues: Array<number>): number
 }
 
 class ConwayAlgorithm<C extends Cell> extends EvolutionAlgorithm<C> {
@@ -135,7 +135,7 @@ class ConwayAlgorithm<C extends Cell> extends EvolutionAlgorithm<C> {
         })
     }
 
-    calculateNewValue(neighbourValues: Array<number>): number {
+    protected calculateNewValue(neighbourValues: Array<number>): number {
         const normalizedValues = ConwayAlgorithm.normalizeValuesOneOrZero(neighbourValues)
         const neighbourSum = normalizedValues.reduce((sum, current) => sum + current, 0)
         if (neighbourSum < 2 || neighbourSum > 3) return 0
