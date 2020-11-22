@@ -9,13 +9,6 @@ class Cell {
         this.hasChanged = false
     }
 
-    private setValue(v: number) {
-        if(v != this.value) {
-            this.value = v
-            this.hasChanged = true
-        }
-    }
-
     getValue(): number {
         return this.value
     }
@@ -26,7 +19,13 @@ class Cell {
     }
 
     apply() {
-        this.setValue(this.newValue)
+        if(this.newValue != this.value) {
+            this.value = this.newValue 
+            this.hasChanged = true
+        }
+        else {
+            this.hasChanged = false            
+        }
     }
 
     getHasChanged() {
