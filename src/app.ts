@@ -26,7 +26,7 @@ function ecToggle() {
 }
 toggleButton.addEventListener('click', ecToggle)
 
-const startPatternArea = document.getElementById('start-pattern')
+const startPatternArea = <HTMLTextAreaElement> document.getElementById('start-pattern')
 function ecReset() {
     ecStop()
     ca.reset(startPatternArea.value)

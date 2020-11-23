@@ -11,3 +11,13 @@ install dependencies:
 run app:
 
     npm start
+
+## development
+
+run the unittests:
+
+    npm test
+
+run watch:
+
+    npm run watch
