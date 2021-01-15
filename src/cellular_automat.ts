@@ -2,15 +2,25 @@ class Cell {
     private value: number
     private newValue: number
     private hasChanged: boolean
+    private neighbours: Array<Cell>
 
     constructor() {
         this.value = 0
         this.newValue = 0
         this.hasChanged = false
+        this.neighbours = new Array<Cell>()
     }
 
     getValue(): number {
         return this.value
+    }
+
+    setNeighbours(n: Array<Cell>) {
+        this.neighbours = n
+    }
+
+    getNeighbours(): Array<Cell> {
+        return this.neighbours
     }
 
     enterValue(v: number): Cell {
@@ -61,7 +71,6 @@ class Cell2D extends Cell {
 }
 
 abstract class Universe<C extends Cell> {
-    abstract getNeighbours(cell: C): Array<C>
     
     abstract getCells(): Array<C>
     
@@ -81,14 +90,17 @@ class Endless2DUniverse extends Universe<Cell2D> {
     
     constructor(width: number, height: number) {
         super()
+        this.width = width
+        this.height = height
         this.cells = []
         for (var y = 0; y < height; y++) {
             for (var x = 0; x < width; x++) {
                 this.cells.push(new Cell2D(x, y))
             }
         }
-        this.width = width
-        this.height = height
+        for (let cell of this.cells) {
+            cell.setNeighbours(this.getNeighbours(cell))
+        }
     }
 
     static cycle(v: number, max: number): number {
@@ -112,7 +124,7 @@ class Endless2DUniverse extends Universe<Cell2D> {
         return this.cells
     }
 
-    getNeighbours(cell: Cell2D): Array<Cell2D> {
+    private getNeighbours(cell: Cell2D): Array<Cell2D> {
         const x = cell.getX()
         const y = cell.getY()
         const neighbours = new Array<Cell2D>()
@@ -134,8 +146,7 @@ abstract class EvolutionAlgorithm<C extends Cell> {
 
     iterate() {
         this.universe.getCells().forEach(cell => {
-            const neighbours = this.universe.getNeighbours(cell)
-            const newValue = this.calculateNewValue(cell.getValue(), neighbours.map(c => c.getValue()))
+            const newValue = this.calculateNewValue(cell.getValue(), cell.getNeighbours().map(c => c.getValue()))
             cell.enterValue(newValue)
         })
         this.universe.getCells().forEach(c => c.apply())
