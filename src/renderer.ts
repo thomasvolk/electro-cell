@@ -45,6 +45,14 @@ class CellularAutomat2D {
         this.universe.getCell(x, y).enterValue(1).apply()
     }
     
+    random() {
+        this.universe.reset()
+        for (var c of this.universe.getCells()) {
+            c.enterValue(Math.floor(Math.random() * Math.floor(2)))
+            c.apply()
+        }
+    }
+
     reset(pattern: string = "") {
         stop()
         this.universe.reset()

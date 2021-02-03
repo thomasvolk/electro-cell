@@ -1,7 +1,7 @@
 
 
 
-const ca = new CellularAutomat2D(80, 60, 1)
+const ca = new CellularAutomat2D(400, 400, 1)
 
 const toggleButton = document.getElementById('toggle-button')
 
@@ -14,7 +14,6 @@ function ecStart() {
     ca.start()
     toggleButton.textContent = "Stop"
 }
-
 
 function ecToggle() {
     if(ca.isRunning()) {
@@ -31,7 +30,15 @@ function ecReset() {
     ecStop()
     ca.reset(startPatternArea.value)
 }
-const resetButton = document.getElementById('reset-button')
-resetButton.addEventListener('click', ecReset)
+const applyButton = document.getElementById('apply-button')
+applyButton.addEventListener('click', ecReset)
+
+function ecRandom() {
+    ecStop()
+    ca.random()
+    ca.draw()
+}
+const randomButton = document.getElementById('random-button')
+randomButton.addEventListener('click', ecRandom)
 
 ecReset()
