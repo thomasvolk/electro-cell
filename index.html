@@ -11,17 +11,22 @@
       http-equiv="X-Content-Security-Policy"
       content="default-src 'self'; script-src 'self'"
     />
+    <link rel="stylesheet" href="layout.css"/>
   </head>
   <body>
-    <canvas width="600" height="600" id="canvas"></canvas>
-    <button id="toggle-button">Start</button> 
-    <button id="random-button">Random</button> 
-    <textarea cols="10" rows="6" id="start-pattern">
+    <div class="canvas">
+      <canvas width="600" height="600" id="canvas"></canvas>
+    </div>
+    <div class="sidebar">
+      <button id="toggle-button">Start</button> 
+      <button id="random-button">Random</button> 
+      <textarea cols="10" rows="6" id="start-pattern">
        *
         *
       ***
-    </textarea>
-    <button id="apply-button">Apply pattern</button> 
+      </textarea>
+      <button id="apply-button">Apply pattern</button> 
+    </div>
   </body>
   <script src="./dist/cellular_automat.js"></script>
   <script src="./dist/renderer.js"></script>
