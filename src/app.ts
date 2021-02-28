@@ -1,7 +1,7 @@
 
 
 
-const ca = new CellularAutomat2D(400, 400, 1)
+const ca = new CellularAutomat2D(700, 700, 1)
 
 const toggleButton = document.getElementById('toggle-button')
 
