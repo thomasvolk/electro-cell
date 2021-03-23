@@ -1,0 +1,13 @@
+canvas {
+  background-color: #ddd;
+}
+
+.canvas {
+  float: left;
+  width: 85%;
+}
+
+.sidebar {
+  float: left;
+  width: 15%;
+}

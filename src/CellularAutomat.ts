@@ -49,7 +49,7 @@ class Cell {
     }
 }
 
-class Cell2D extends Cell {
+export class Cell2D extends Cell {
 
     private x: number
     private y: number
@@ -83,7 +83,7 @@ abstract class Universe<C extends Cell> {
     }
 }
 
-class Endless2DUniverse extends Universe<Cell2D> {
+export class Endless2DUniverse extends Universe<Cell2D> {
     private cells: Array<Cell2D>
     width: number
     height: number
@@ -137,7 +137,7 @@ class Endless2DUniverse extends Universe<Cell2D> {
 }
 
 
-abstract class EvolutionAlgorithm<C extends Cell> {
+export abstract class EvolutionAlgorithm<C extends Cell> {
     private universe: Universe<C>
 
     constructor(universe: Universe<C>) {
@@ -155,7 +155,7 @@ abstract class EvolutionAlgorithm<C extends Cell> {
     protected abstract calculateNewValue(cellValue: number, neighbourValues: Array<number>): number
 }
 
-class ConwayAlgorithm<C extends Cell> extends EvolutionAlgorithm<C> {
+export class ConwayAlgorithm<C extends Cell> extends EvolutionAlgorithm<C> {
     static normalizeToOneOrZero(values: Array<number>): Array<number> {
         return values.map(v => {
             if (v > 0) return 1
