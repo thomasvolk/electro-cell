@@ -9,7 +9,8 @@
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "eslint --ext .ts ."
+    "lint": "eslint --ext .ts .",
+    "test": "mocha -r ts-node/register src/**/*spec.ts"
   },
   "keywords": [],
   "author": {
@@ -70,16 +71,21 @@
     "@electron-forge/maker-zip": "^6.0.0-beta.54",
     "@electron-forge/plugin-webpack": "6.0.0-beta.54",
     "@marshallofsound/webpack-asset-relocator-loader": "^0.5.0",
+    "@types/chai": "^4.2.15",
+    "@types/mocha": "^8.2.2",
     "@typescript-eslint/eslint-plugin": "^4.0.1",
     "@typescript-eslint/parser": "^4.0.1",
+    "chai": "^4.3.4",
     "css-loader": "^4.2.1",
     "electron": "12.0.1",
     "eslint": "^7.6.0",
     "eslint-plugin-import": "^2.20.0",
     "fork-ts-checker-webpack-plugin": "^5.0.14",
+    "mocha": "^8.3.2",
     "node-loader": "^1.0.1",
     "style-loader": "^1.2.1",
     "ts-loader": "^8.0.2",
+    "ts-node": "^9.1.1",
     "typescript": "^4.0.2"
   },
   "dependencies": {
