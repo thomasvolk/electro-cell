@@ -17,7 +17,3 @@ run app:
 run the unittests:
 
     npm test
-
-run watch:
-
-    npm run watch
