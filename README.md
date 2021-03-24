@@ -6,7 +6,7 @@ A cellular automat written in electron typescript.
 
 install dependencies:
 
-     npm install
+    yarn
 
 run app:
 
