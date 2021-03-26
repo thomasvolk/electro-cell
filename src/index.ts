@@ -16,7 +16,7 @@ const createWindow = (): void => {
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
-  if (app.commandLine.hasSwitch('dev-tools')) {
+  if (process.env.ELECTRO_CELL_DEV_TOOLS) {
     mainWindow.webContents.openDevTools();
   }
 };
