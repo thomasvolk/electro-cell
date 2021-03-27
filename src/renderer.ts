@@ -30,6 +30,7 @@ import './index.css';
 import 'jquery';
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.css';
+import $ from "jquery";
 
 import {
     Endless2DUniverse, 
@@ -169,5 +170,3 @@ const randomButton = document.getElementById('random-button')
 randomButton.addEventListener('click', ecRandom)
 
 ecReset()
-
-console.log('👋 This message is being logged by "renderer.js", included via webpack');
