@@ -27,6 +27,9 @@
  */
 
 import './index.css';
+import 'jquery';
+import 'bootstrap';
+import 'bootstrap/dist/css/bootstrap.css';
 
 import {
     Endless2DUniverse, 
@@ -125,7 +128,7 @@ class CellularAutomat2D {
 
 
 
-const ca = new CellularAutomat2D(700, 700, 1)
+const ca = new CellularAutomat2D(400, 400, 1)
 
 const toggleButton = document.getElementById('toggle-button')
 

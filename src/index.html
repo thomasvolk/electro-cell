@@ -10,14 +10,20 @@
       <canvas width="700" height="700" id="canvas"></canvas>
     </div>
     <div class="sidebar">
-      <button id="toggle-button">Start</button> 
-      <button id="random-button">Random</button> 
-      <textarea cols="14" rows="10" id="start-pattern">
-       *
-        *
-      ***
-      </textarea>
-      <button id="apply-button">Apply pattern</button> 
+      <div class="input-group mb-3">
+        <button class="btn btn-primary" id="toggle-button">Start</button> 
+        <span class="input-group-text"> </span>
+        <button class="btn btn-primary" id="random-button">Random</button> 
+      </div>
+      <div class="input-group">
+        <span class="input-group-text">Pattern</span>
+        <textarea class="form-control" aria-label="Pattern" cols="14" rows="10" id="start-pattern">
+         *
+          *
+        ***
+        </textarea>
+        <button class="btn btn-primary" id="apply-button">Apply pattern</button> 
+      </div>
     </div>
   </body>
 </html>
