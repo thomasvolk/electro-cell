@@ -2,6 +2,8 @@
 
 A cellular automat written in electron typescript.
 
+![cells](cells.png)
+
 ## quick start
 
 install dependencies:
