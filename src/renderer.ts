@@ -129,18 +129,20 @@ class CellularAutomat2D {
 
 const ca = new CellularAutomat2D(400, 400, 1)
 
-$('#start-button').on("click", () => {
-    $('#start-button').prop('disabled', true)
-    $('#stop-button').prop('disabled', false)
-    ca.start()
-})
-$('#stop-button').on("click", () => {
-    $('#stop-button').prop('disabled', true)
-    $('#start-button').prop('disabled', false)
-    ca.stop()
+$('#start-stop-button').on("click", () => {
+    if(ca.isRunning()) {
+        ca.stop()
+        $('#start-stop-button').text("Start")
+    }
+    else {
+        ca.start()
+        $('#start-stop-button').text("Stop")
+    }
 })
 
-$('#stop-button').prop('disabled', true)
+$('#shuffle-button').on("click", () => {
+    ca.random()
+})
 
 ca.random()
 ca.draw()
