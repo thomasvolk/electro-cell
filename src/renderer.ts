@@ -127,46 +127,20 @@ class CellularAutomat2D {
 }
 
 
-
-
 const ca = new CellularAutomat2D(400, 400, 1)
 
-const toggleButton = document.getElementById('toggle-button')
-
-function ecStop() {
-    ca.stop()
-    toggleButton.textContent = "Start"
-}
-
-function ecStart() {
+$('#start-button').on("click", () => {
+    $('#start-button').prop('disabled', true)
+    $('#stop-button').prop('disabled', false)
     ca.start()
-    toggleButton.textContent = "Stop"
-}
+})
+$('#stop-button').on("click", () => {
+    $('#stop-button').prop('disabled', true)
+    $('#start-button').prop('disabled', false)
+    ca.stop()
+})
 
-function ecToggle() {
-    if(ca.isRunning()) {
-        ecStop()
-    }
-    else {
-        ecStart()
-    }
-}
-toggleButton.addEventListener('click', ecToggle)
+$('#stop-button').prop('disabled', true)
 
-const startPatternArea = <HTMLTextAreaElement> document.getElementById('start-pattern')
-function ecReset() {
-    ecStop()
-    ca.reset(startPatternArea.value)
-}
-const applyButton = document.getElementById('apply-button')
-applyButton.addEventListener('click', ecReset)
-
-function ecRandom() {
-    ecStop()
-    ca.random()
-    ca.draw()
-}
-const randomButton = document.getElementById('random-button')
-randomButton.addEventListener('click', ecRandom)
-
-ecReset()
+ca.random()
+ca.draw()

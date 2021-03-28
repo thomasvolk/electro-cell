@@ -6,23 +6,21 @@
 
   </head>
   <body>
-    <div class="canvas">
-      <canvas width="700" height="700" id="canvas"></canvas>
-    </div>
     <div class="sidebar">
-      <div class="input-group mb-3">
-        <button class="btn btn-primary" id="toggle-button">Start</button> 
-        <span class="input-group-text"> </span>
-        <button class="btn btn-primary" id="random-button">Random</button> 
-      </div>
-      <div class="input-group">
-        <span class="input-group-text">Pattern</span>
-        <textarea class="form-control" aria-label="Pattern" cols="14" rows="10" id="start-pattern">
-         *
-          *
-        ***
-        </textarea>
-        <button class="btn btn-primary" id="apply-button">Apply pattern</button> 
+      <div class="container">
+        <div class="row">
+          <div class="col-12 text-center">
+            <button class="btn btn-primary" id="start-button">Start</button> 
+            <button class="btn btn-primary" id="stop-button">Stop</button> 
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12 text-center">
+            <div class="canvas">
+              <canvas width="800" height="800" id="canvas"></canvas>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </body>
