@@ -12,6 +12,10 @@ run app:
 
     npm start
 
+package application:
+
+    yarn package
+
 ## development
 
 run the unittests:
