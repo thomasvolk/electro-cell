@@ -142,6 +142,7 @@ $('#start-stop-button').on("click", () => {
 
 $('#shuffle-button').on("click", () => {
     ca.random()
+    ca.draw()
 })
 
 ca.random()
