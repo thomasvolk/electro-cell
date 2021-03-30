@@ -127,7 +127,7 @@ class CellularAutomat2D {
 }
 
 
-const ca = new CellularAutomat2D(400, 400, 1)
+const ca = new CellularAutomat2D(300, 300, 1)
 
 $('#start-stop-button').on("click", () => {
     if(ca.isRunning()) {
