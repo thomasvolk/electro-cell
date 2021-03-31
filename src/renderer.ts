@@ -88,7 +88,7 @@ class CellularAutomat2D {
         this.universe.reset()
         for (var c of this.universe.getCells()) {
             c.enterValue(Math.floor(Math.random() * Math.floor(2)))
-            c.apply()
+            c.apply(true)
         }
     }
 

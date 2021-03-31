@@ -28,13 +28,13 @@ class Cell {
         return this
     }
 
-    apply() {
+    apply(touch: boolean = false) {
         if(this.newValue != this.value) {
             this.value = this.newValue 
             this.hasChanged = true
         }
         else {
-            this.hasChanged = false            
+            this.hasChanged = touch            
         }
     }
 
