@@ -1,4 +1,5 @@
 import { app, BrowserWindow } from 'electron';
+import { ipcMain, dialog } from "electron";
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: any;
 
@@ -13,7 +14,9 @@ const createWindow = (): void => {
     height: 800,
     width: 1000,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true,
     } 
   });
 
@@ -49,3 +52,57 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
+
+
+class File {
+  private dialogFiters = [
+    { name: 'pattern', extensions: ['json'] },
+    { name: 'All Files', extensions: ['*'] }
+  ] 
+  private path: string
+  
+  constructor() {
+    this.path = null
+  }
+  
+  open() {
+    dialog.showOpenDialog({ 
+      properties: ['openFile'],
+      filters: this.dialogFiters
+    }).then(result => {
+      if(!result.canceled) {
+        this.path = result.filePaths[0]
+      }
+    }).catch(err => {
+      console.log(err)
+    })
+  }
+  
+  save() {
+    if(this.path == null) {
+      dialog.showSaveDialog({ 
+        properties: ['createDirectory'],
+        filters: this.dialogFiters
+      })
+    }
+  }
+  
+  saveAs() {
+    this.path = null
+    this.save()
+  }
+}
+
+const fs = new File()
+
+ipcMain.on('file-operation', (event, arg) => {
+  if(arg == 'open') {
+    fs.open()
+  }
+  else if(arg == 'save') {
+    fs.save()
+  }
+  else if(arg == 'save-as') {
+    fs.saveAs()
+  }
+})

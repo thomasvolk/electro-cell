@@ -34,7 +34,7 @@ import $ from "jquery";
 import {
     CellularAutomat2DPresenter
 } from "./CellularAutomat2DPresenter";
-
+import { ipcRenderer } from "electron";
 
 const ca = new CellularAutomat2DPresenter(300, 300, 1)
 
@@ -56,15 +56,15 @@ $('#shuffle-button').on("click", () => {
 
 
 $('#open-file').on("click", () => {
-    console.log("open file")
+    ipcRenderer.send('file-operation','open')
 })
 
 $('#save-file').on("click", () => {
-    console.log("save file")
+    ipcRenderer.send('file-operation','save')
 })
 
 $('#save-as-file').on("click", () => {
-    console.log("save as file")
+    ipcRenderer.send('file-operation','save-as')
 })
 
 ca.random()
