@@ -1,5 +1,6 @@
 import { app, BrowserWindow } from 'electron';
 import { ipcMain, dialog } from "electron";
+import fs from 'fs';
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: any;
 
@@ -54,7 +55,7 @@ app.on('activate', () => {
 // code. You can also put them in separate files and import them here.
 
 
-class File {
+class FileService {
   private dialogFiters = [
     { name: 'pattern', extensions: ['json'] },
     { name: 'All Files', extensions: ['*'] }
@@ -66,43 +67,62 @@ class File {
   }
   
   open() {
-    dialog.showOpenDialog({ 
-      properties: ['openFile'],
-      filters: this.dialogFiters
-    }).then(result => {
-      if(!result.canceled) {
-        this.path = result.filePaths[0]
-      }
-    }).catch(err => {
-      console.log(err)
-    })
-  }
-  
-  save() {
-    if(this.path == null) {
-      dialog.showSaveDialog({ 
-        properties: ['createDirectory'],
+    try {
+      this.path = dialog.showOpenDialogSync({ 
+        properties: ['openFile'],
         filters: this.dialogFiters
-      })
+      })[0]
+    } catch(err) {
+      return { "message": `ERROR open file: ${this.path} - ${err}`, error: true}
+    }
+    try {
+      const content = fs.readFileSync(this.path, 'utf-8')
+      return { "message": `opened file: ${this.path}`, error: false, content: content}
+    } catch(err) {
+      return { "message": `ERROR reading file: ${this.path} - ${err}`, error: true}
     }
   }
+
+  private write(content: string) {
+    try {
+      fs.writeFileSync(this.path, content)
+      return { "message": `file saved: ${this.path}`, error: false}
+    } catch(err) {
+      return { "message": `ERROR saving file: ${this.path} - ${err}`, error: true}
+    }
+  }
+
+  save(content: string) {
+    if(this.path == null) {
+      try {
+        this.path = dialog.showSaveDialogSync({ 
+          properties: ['createDirectory'],
+          filters: this.dialogFiters
+        })
+      } catch(err) {
+        return { "message": `ERROR saving file: ${this.path} - ${err}`, error: true}
+      }
+    }
+    return this.write(content)
+  }
   
-  saveAs() {
+  saveAs(content: string) {
     this.path = null
-    this.save()
+    return this.save(content)
   }
 }
 
-const fs = new File()
+const fileSystem = new FileService()
 
-ipcMain.on('file-operation', (event, arg) => {
-  if(arg == 'open') {
-    fs.open()
+ipcMain.handle('open-file', async (event, arg) => {
+  return fileSystem.open()
+})
+
+ipcMain.handle('save-file', async (event, type, content) => {
+  if(type == 'save') {
+    return fileSystem.save(content)
   }
-  else if(arg == 'save') {
-    fs.save()
-  }
-  else if(arg == 'save-as') {
-    fs.saveAs()
+  else if(type == 'save-as') {
+    return fileSystem.saveAs(content)
   }
 })

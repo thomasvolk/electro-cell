@@ -54,17 +54,67 @@ $('#shuffle-button').on("click", () => {
     ca.draw()
 })
 
+class StatusBar {
+    private id: string
+    constructor(id: string) {
+        this.id = id
+    }
+
+    reset() {
+        const status = $(this.id)
+        status.removeClass()
+        status.addClass('alert')
+        status.text('')
+    }
+
+    private show(message: string, cssClass: string) {
+        this.reset()
+        const status = $(this.id)
+        status.addClass(cssClass)
+        status.text(message)
+    }
+
+    danger(message: string) {
+        this.show(message, 'alert-danger')
+    }
+
+    success(message: string) {
+        this.show(message, 'alert-success')
+    }
+}
+
+const statusBar = new StatusBar('#status-bar')
+
+async function saveFile(type: string) {
+    const result = await ipcRenderer.invoke('save-file',type, 'TEST-save')
+    if(result.error) {
+        statusBar.danger(result.message)
+    }
+    else {
+        statusBar.success(result.message)
+    }
+}
+
+async function openFile() {
+    const result = await ipcRenderer.invoke('open-file')
+    if(result.error) {
+        statusBar.danger(result.message)
+    }
+    else {
+        statusBar.success(result.message)
+    }
+}
 
 $('#open-file').on("click", () => {
-    ipcRenderer.send('file-operation','open')
+    openFile()
 })
 
 $('#save-file').on("click", () => {
-    ipcRenderer.send('file-operation','save')
+    saveFile('save')
 })
 
 $('#save-as-file').on("click", () => {
-    ipcRenderer.send('file-operation','save-as')
+    saveFile('save-as')
 })
 
 ca.random()
