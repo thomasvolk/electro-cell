@@ -136,26 +136,11 @@ export class Endless2DUniverse extends Universe<Cell2D> {
 
 }
 
-
-export abstract class EvolutionAlgorithm<C extends Cell> {
-    private universe: Universe<C>
-
-    constructor(universe: Universe<C>) {
-        this.universe = universe
-    }
-
-    iterate() {
-        this.universe.getCells().forEach(cell => {
-            const newValue = this.calculateNewValue(cell.getValue(), cell.getNeighbours().map(c => c.getValue()))
-            cell.enterValue(newValue)
-        })
-        this.universe.getCells().forEach(c => c.apply())
-    }
-
-    protected abstract calculateNewValue(cellValue: number, neighbourValues: Array<number>): number
+export abstract class Rule {
+    abstract calculateNewValue(cellValue: number, neighbourValues: Array<number>): number
 }
 
-export class ConwayAlgorithm<C extends Cell> extends EvolutionAlgorithm<C> {
+export class EEFFRule extends Rule {
     static normalizeToOneOrZero(values: Array<number>): Array<number> {
         return values.map(v => {
             if (v > 0) return 1
@@ -163,16 +148,46 @@ export class ConwayAlgorithm<C extends Cell> extends EvolutionAlgorithm<C> {
         })
     }
 
-    static calculateCellValue(cellValue: number, neighbourValues: Array<number>): number {
-        const normalizedValues = ConwayAlgorithm.normalizeToOneOrZero(neighbourValues)
-        const neighbourSum = normalizedValues.reduce((sum, current) => sum + current, 0)
-        if (neighbourSum < 2 || neighbourSum > 3) return 0
-        if (cellValue > 0) return 1
-        if (cellValue == 0 && neighbourSum == 3) return 1
-        return 0
+    private el: number
+    private eu: number
+    private fl: number
+    private fu: number
+
+    constructor(el: number, eu: number, fl: number, fu: number) {
+        super()
+        this.el = el
+        this.eu = eu
+        this.fl = fl
+        this.fu = fu
     }
 
-    protected calculateNewValue(cellValue: number, neighbourValues: Array<number>): number {
-        return ConwayAlgorithm.calculateCellValue(cellValue, neighbourValues)
+    calculateNewValue(cellValue: number, neighbourValues: Array<number>): number {
+        const normalizedValues = EEFFRule.normalizeToOneOrZero(neighbourValues)
+        const livingNeighbours = normalizedValues.reduce((sum, current) => sum + current, 0)
+        if(cellValue > 0 && (livingNeighbours < this.el || livingNeighbours > this.eu)) {
+            return 0
+        }
+        else if(cellValue == 0 && (livingNeighbours >= this.fl && livingNeighbours <= this.fu)) {
+            return 1
+        }
+        return cellValue
+    }
+}
+
+export class EvolutionAlgorithm<C extends Cell> {
+    private universe: Universe<C>
+    private rule: Rule
+
+    constructor(universe: Universe<C>, rule: Rule) {
+        this.universe = universe
+        this.rule = rule
+    }
+
+    iterate() {
+        this.universe.getCells().forEach(cell => {
+            const newValue = this.rule.calculateNewValue(cell.getValue(), cell.getNeighbours().map(c => c.getValue()))
+            cell.enterValue(newValue)
+        })
+        this.universe.getCells().forEach(c => c.apply())
     }
 }

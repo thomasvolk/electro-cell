@@ -1,7 +1,7 @@
 import {
     Endless2DUniverse, 
     EvolutionAlgorithm, 
-    ConwayAlgorithm, 
+    EEFFRule, 
     Cell2D
 } from "./CellularAutomat";
 
@@ -26,7 +26,7 @@ export class CellularAutomat2DPresenter {
         this.interationIntervall = interationIntervall
         this.interval = null
         this.universe = new Endless2DUniverse(this.width, this.height)
-        this.algorithm = new ConwayAlgorithm<Cell2D>(this.universe)
+        this.algorithm = new EvolutionAlgorithm<Cell2D>(this.universe, new EEFFRule(2, 3, 3, 3))
     }
 
     draw() {

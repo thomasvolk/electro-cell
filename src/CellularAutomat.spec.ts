@@ -1,8 +1,7 @@
 import { expect, assert } from 'chai';
 import {
     Endless2DUniverse, 
-    EvolutionAlgorithm, 
-    ConwayAlgorithm, 
+    EEFFRule, 
     Cell2D
 } from "./CellularAutomat";
 
@@ -84,7 +83,7 @@ describe('cycle function', () => {
 describe('ConwayAlgorithm', () => {
     it('should normalizeToOneOrZero', () => {
         expect(
-            ConwayAlgorithm.normalizeToOneOrZero([5, 0.7, 0, 1, -1, 0]).join(",")
+            EEFFRule.normalizeToOneOrZero([5, 0.7, 0, 1, -1, 0]).join(",")
         ).to.equal("1,1,0,1,0,0")
     });
     it('should implement the rules correctly', () => {
@@ -120,9 +119,10 @@ describe('ConwayAlgorithm', () => {
                 'expected': 0
             }
         ]
+        const conwayRule = new EEFFRule(2, 3, 3, 3)
         testData.forEach(testSet => {
             expect(
-                ConwayAlgorithm.calculateCellValue(testSet.cell, testSet.neighbours)
+                conwayRule.calculateNewValue(testSet.cell, testSet.neighbours)
             ).to.equal(testSet.expected);
         });
     });
