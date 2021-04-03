@@ -1,5 +1,5 @@
 import {
-    Endless2DUniverse, 
+    Universe2D, 
     EvolutionAlgorithm, 
     EEFFRule, 
     Cell2D
@@ -14,7 +14,7 @@ export class CellularAutomat2DPresenter {
     private height: number
     private interationIntervall: number
     private interval: any
-    private universe: Endless2DUniverse
+    private universe: Universe2D
     private algorithm: EvolutionAlgorithm<Cell2D>
 
     constructor(width: number, height: number, interationIntervall = 100) {
@@ -25,7 +25,7 @@ export class CellularAutomat2DPresenter {
         this.height = height
         this.interationIntervall = interationIntervall
         this.interval = null
-        this.universe = new Endless2DUniverse(this.width, this.height)
+        this.universe = new Universe2D(this.width, this.height)
         this.algorithm = new EvolutionAlgorithm<Cell2D>(this.universe, new EEFFRule(2, 3, 3, 3))
     }
 

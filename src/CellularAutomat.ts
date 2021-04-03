@@ -83,15 +83,17 @@ abstract class Universe<C extends Cell> {
     }
 }
 
-export class Endless2DUniverse extends Universe<Cell2D> {
+export class Universe2D extends Universe<Cell2D> {
     private cells: Array<Cell2D>
     width: number
     height: number
+    endless: boolean
     
-    constructor(width: number, height: number) {
+    constructor(width: number, height: number, endless: boolean = true) {
         super()
         this.width = width
         this.height = height
+        this.endless = endless
         this.cells = []
         for (var y = 0; y < height; y++) {
             for (var x = 0; x < width; x++) {
@@ -113,9 +115,13 @@ export class Endless2DUniverse extends Universe<Cell2D> {
         return v % max
     }
 
+    private isInside(x: number, y: number): boolean {
+        return this.endless || x > 0 && x < this.width && y > 0 && y < this.height
+    }
+
     getCell(x: number, y: number): Cell2D {
-        const cx = Endless2DUniverse.cycle(x, this.width)
-        const cy = Endless2DUniverse.cycle(y, this.height)
+        const cx = Universe2D.cycle(x, this.width)
+        const cy = Universe2D.cycle(y, this.height)
         const i = cx + cy * this.width
         return this.cells[i]
     }
@@ -128,8 +134,12 @@ export class Endless2DUniverse extends Universe<Cell2D> {
         const x = cell.getX()
         const y = cell.getY()
         const neighbours = new Array<Cell2D>()
-        for (var n of [[-1, -1], [0, -1], [1, -1], [-1, 0], [1, 0], [-1, 1], [0, 1], [1, 1]]) {
-            neighbours.push(this.getCell(x + n[0], y + n[1]))
+        for(var ny = -1; ny < 2; ny++) {
+            for(var nx = -1; nx < 2; nx++) {
+                if(!(nx == 0 && ny == 0) && this.isInside(nx, ny)) {
+                    neighbours.push(this.getCell(x + nx, y + ny))
+                }
+            }
         }
         return neighbours
     }
@@ -191,3 +201,4 @@ export class EvolutionAlgorithm<C extends Cell> {
         this.universe.getCells().forEach(c => c.apply())
     }
 }
+
