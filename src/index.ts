@@ -68,18 +68,23 @@ class FileService {
   
   open() {
     try {
-      this.path = dialog.showOpenDialogSync({ 
+      const result = dialog.showOpenDialogSync({ 
         properties: ['openFile'],
         filters: this.dialogFiters
-      })[0]
+      })
+      if(result !== undefined) {
+        this.path = result[0]
+      }
     } catch(err) {
       return { "message": `ERROR open file: ${this.path} - ${err}`, error: true}
     }
-    try {
-      const content = fs.readFileSync(this.path, 'utf-8')
-      return { "message": `opened file: ${this.path}`, error: false, content: content}
-    } catch(err) {
-      return { "message": `ERROR reading file: ${this.path} - ${err}`, error: true}
+    if(this.path != null) {
+      try {
+        const content = fs.readFileSync(this.path, 'utf-8')
+        return { "message": `opened file: ${this.path}`, error: false, content: content}
+      } catch(err) {
+        return { "message": `ERROR reading file: ${this.path} - ${err}`, error: true}
+      }
     }
   }
 

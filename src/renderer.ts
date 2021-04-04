@@ -88,7 +88,7 @@ class StatusBar {
 const statusBar = new StatusBar('#status-bar')
 
 async function saveFile(type: string) {
-    const result = await ipcRenderer.invoke('save-file', type, JSON.stringify(ca.config.toObject()))
+    const result = await ipcRenderer.invoke('save-file', type, JSON.stringify(ca.getConfig().toObject()))
     if(result.error) {
         statusBar.danger(result.message)
     }
@@ -105,10 +105,9 @@ async function openFile() {
     else {
         try {
             const fileConfig = Configuration2D.fromObject(JSON.parse(result.content))
+            ca.reset(fileConfig)
             statusBar.success(result.message)
-            ca.stop()
-            ca = new CellularAutomat2DPresenter(fileConfig)
-            ca.draw()
+            $('#start-stop-button').text("Start")
         }
         catch(err) {
             statusBar.danger(`ERROR parsing config: ${err}`)

@@ -131,6 +131,7 @@ export class Universe2D extends Universe<Cell2D> {
     
     static fromObject(obj: any): Universe2D {
         const u = new Universe2D(obj.width, obj.height);
+        u.reset();
         (obj.cells as Array<any>).forEach((c) => {
             const cell = u.getCell(c.x, c.y)
             cell.enterValue(c.v)
@@ -139,7 +140,6 @@ export class Universe2D extends Universe<Cell2D> {
         return u
     }
     
-
     static cycle(v: number, max: number): number {
         if (v < 0) {
             return max + (v % max)
@@ -257,11 +257,13 @@ export class Configuration2D {
     universe: Universe2D
     rule: Rule
     delay_ms: number
+    algorithm: EvolutionAlgorithm<Cell2D>
 
     constructor(universe: Universe2D, rule: Rule, delay_ms: number) {
         this.universe = universe
         this.rule = rule
         this.delay_ms = delay_ms
+        this.algorithm = new EvolutionAlgorithm<Cell2D>(this.universe, this.rule)
     }
 
     toObject(): Object {
