@@ -37,8 +37,8 @@ import {
 import { ipcRenderer } from "electron";
 import { Configuration2D, EEFFRule, Universe2D } from './CellularAutomat';
 
-const config = new Configuration2D(new Universe2D(300, 300), new EEFFRule(2, 3, 3, 3), 1)
-const ca = new CellularAutomat2DPresenter(config)
+const startConfig = new Configuration2D(new Universe2D(300, 300), new EEFFRule(2, 3, 3, 3), 1)
+var ca = new CellularAutomat2DPresenter(startConfig)
 
 $('#start-stop-button').on("click", () => {
     if(ca.isRunning()) {
@@ -88,7 +88,7 @@ class StatusBar {
 const statusBar = new StatusBar('#status-bar')
 
 async function saveFile(type: string) {
-    const result = await ipcRenderer.invoke('save-file', type, JSON.stringify(config.toObject()))
+    const result = await ipcRenderer.invoke('save-file', type, JSON.stringify(ca.config.toObject()))
     if(result.error) {
         statusBar.danger(result.message)
     }
@@ -104,8 +104,11 @@ async function openFile() {
     }
     else {
         try {
-            Configuration2D.fromObject(JSON.parse(result.content))
+            const fileConfig = Configuration2D.fromObject(JSON.parse(result.content))
             statusBar.success(result.message)
+            ca.stop()
+            ca = new CellularAutomat2DPresenter(fileConfig)
+            ca.draw()
         }
         catch(err) {
             statusBar.danger(`ERROR parsing config: ${err}`)

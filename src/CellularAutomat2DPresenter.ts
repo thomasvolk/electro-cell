@@ -17,6 +17,7 @@ export class CellularAutomat2DPresenter {
     private interval: any
     private universe: Universe2D
     private algorithm: EvolutionAlgorithm<Cell2D>
+    config: Configuration2D
 
     constructor(config: Configuration2D) {
         this.canvas = document.getElementById('canvas') as HTMLCanvasElement
@@ -28,6 +29,7 @@ export class CellularAutomat2DPresenter {
         this.interval = null
         this.universe = config.universe
         this.algorithm = new EvolutionAlgorithm<Cell2D>(this.universe, config.rule)
+        this.config = config
     }
 
     draw() {
