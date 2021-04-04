@@ -69,12 +69,8 @@ export class Cell2D extends Cell implements Serializable {
         return { 
             x: this.x,
             y: this.y,
-            value: this.getValue()
+            v: this.getValue()
          }
-    }
-    
-    static fromObject(obj: Object): Cell2D {
-        throw new Error("Method not implemented.")
     }
     
     getX(): number {
@@ -133,8 +129,14 @@ export class Universe2D extends Universe<Cell2D> {
         }
     }
     
-    static fromObject(obj: Object): Universe2D {
-        throw new Error("Method not implemented.")
+    static fromObject(obj: any): Universe2D {
+        const u = new Universe2D(obj.width, obj.height);
+        (obj.cells as Array<any>).forEach((c) => {
+            const cell = u.getCell(c.x, c.y)
+            cell.enterValue(c.v)
+            cell.apply(true)
+        })
+        return u
     }
     
 
@@ -211,8 +213,13 @@ export class EEFFRule implements Rule {
             fu: this.fu
         }
     }
-    static fromObject(obj: Object): EEFFRule {
-        throw new Error("Method not implemented.")
+    static fromObject(obj: any): EEFFRule {
+        return new EEFFRule(
+            obj.el,
+            obj.eu,
+            obj.fl,
+            obj.fu
+        )
     }
 
     calculateNewValue(cellValue: number, neighbourValues: Array<number>): number {
@@ -265,8 +272,12 @@ export class Configuration2D {
         }
     }
 
-    static fromObject(obj: Object): Configuration2D {
-        throw new Error("Method not implemented.")
+    static fromObject(cfg: any): Configuration2D {
+        return new Configuration2D(
+            Universe2D.fromObject(cfg.universe),
+            EEFFRule.fromObject(cfg.rule),
+            cfg.delay_ms
+        )
     }
 }
 

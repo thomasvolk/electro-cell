@@ -103,7 +103,13 @@ async function openFile() {
         statusBar.danger(result.message)
     }
     else {
-        statusBar.success(result.message)
+        try {
+            Configuration2D.fromObject(JSON.parse(result.content))
+            statusBar.success(result.message)
+        }
+        catch(err) {
+            statusBar.danger(`ERROR parsing config: ${err}`)
+        }
     }
 }
 
