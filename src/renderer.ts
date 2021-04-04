@@ -88,7 +88,7 @@ class StatusBar {
 const statusBar = new StatusBar('#status-bar')
 
 async function saveFile(type: string) {
-    const result = await ipcRenderer.invoke('save-file', type, config.toObject())
+    const result = await ipcRenderer.invoke('save-file', type, JSON.stringify(config.toObject()))
     if(result.error) {
         statusBar.danger(result.message)
     }
