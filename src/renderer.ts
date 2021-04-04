@@ -35,8 +35,10 @@ import {
     CellularAutomat2DPresenter
 } from "./CellularAutomat2DPresenter";
 import { ipcRenderer } from "electron";
+import { Configuration2D, EEFFRule, Universe2D } from './CellularAutomat';
 
-const ca = new CellularAutomat2DPresenter(300, 300, 1)
+const config = new Configuration2D(new Universe2D(300, 300), new EEFFRule(2, 3, 3, 3), 1)
+const ca = new CellularAutomat2DPresenter(config)
 
 $('#start-stop-button').on("click", () => {
     if(ca.isRunning()) {
@@ -86,7 +88,7 @@ class StatusBar {
 const statusBar = new StatusBar('#status-bar')
 
 async function saveFile(type: string) {
-    const result = await ipcRenderer.invoke('save-file',type, 'TEST-save')
+    const result = await ipcRenderer.invoke('save-file', type, config.toObject())
     if(result.error) {
         statusBar.danger(result.message)
     }

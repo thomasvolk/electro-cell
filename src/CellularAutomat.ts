@@ -1,3 +1,7 @@
+interface Serializable {
+    toObject(): Object
+}
+
 class Cell {
     private value: number
     private newValue: number
@@ -49,7 +53,7 @@ class Cell {
     }
 }
 
-export class Cell2D extends Cell {
+export class Cell2D extends Cell implements Serializable {
 
     private x: number
     private y: number
@@ -59,6 +63,18 @@ export class Cell2D extends Cell {
         super()
         this.x = x
         this.y = y
+    }
+
+    toObject(): Object {
+        return { 
+            x: this.x,
+            y: this.y,
+            value: this.getValue()
+         }
+    }
+    
+    static fromObject(obj: Object): Cell2D {
+        throw new Error("Method not implemented.")
     }
     
     getX(): number {
@@ -70,7 +86,8 @@ export class Cell2D extends Cell {
     }
 }
 
-abstract class Universe<C extends Cell> {
+abstract class Universe<C extends Cell> implements Serializable {
+    abstract toObject(): Object 
     
     abstract getCells(): Array<C>
     
@@ -104,6 +121,22 @@ export class Universe2D extends Universe<Cell2D> {
             cell.setNeighbours(this.getNeighbours(cell))
         }
     }
+
+    toObject(): Object {
+        const cells = this.cells.filter((c) => c.getValue() > 0).map((c) => c.toObject())
+        return {
+            type: "2D",
+            endless: this.endless,
+            width: this.width,
+            height: this.height,
+            cells: cells
+        }
+    }
+    
+    static fromObject(obj: Object): Universe2D {
+        throw new Error("Method not implemented.")
+    }
+    
 
     static cycle(v: number, max: number): number {
         if (v < 0) {
@@ -146,11 +179,11 @@ export class Universe2D extends Universe<Cell2D> {
 
 }
 
-export abstract class Rule {
-    abstract calculateNewValue(cellValue: number, neighbourValues: Array<number>): number
+export interface Rule extends Serializable {
+    calculateNewValue(cellValue: number, neighbourValues: Array<number>): number
 }
 
-export class EEFFRule extends Rule {
+export class EEFFRule implements Rule {
     static normalizeToOneOrZero(values: Array<number>): Array<number> {
         return values.map(v => {
             if (v > 0) return 1
@@ -164,11 +197,22 @@ export class EEFFRule extends Rule {
     private fu: number
 
     constructor(el: number, eu: number, fl: number, fu: number) {
-        super()
         this.el = el
         this.eu = eu
         this.fl = fl
         this.fu = fu
+    }
+    toObject(): Object {
+        return {
+            type: "EEFF",
+            el: this.el,
+            eu: this.eu,
+            fl: this.fl,
+            fu: this.fu
+        }
+    }
+    static fromObject(obj: Object): EEFFRule {
+        throw new Error("Method not implemented.")
     }
 
     calculateNewValue(cellValue: number, neighbourValues: Array<number>): number {
@@ -199,6 +243,30 @@ export class EvolutionAlgorithm<C extends Cell> {
             cell.enterValue(newValue)
         })
         this.universe.getCells().forEach(c => c.apply())
+    }
+}
+
+export class Configuration2D {
+    universe: Universe2D
+    rule: Rule
+    delay_ms: number
+
+    constructor(universe: Universe2D, rule: Rule, delay_ms: number) {
+        this.universe = universe
+        this.rule = rule
+        this.delay_ms = delay_ms
+    }
+
+    toObject(): Object {
+        return {
+            universe: this.universe.toObject(),
+            rule: this.rule.toObject(),
+            delay_ms: this.delay_ms
+        }
+    }
+
+    static fromObject(obj: Object): Configuration2D {
+        throw new Error("Method not implemented.")
     }
 }
 

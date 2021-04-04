@@ -1,4 +1,5 @@
 import {
+    Configuration2D,
     Universe2D, 
     EvolutionAlgorithm, 
     EEFFRule, 
@@ -17,16 +18,16 @@ export class CellularAutomat2DPresenter {
     private universe: Universe2D
     private algorithm: EvolutionAlgorithm<Cell2D>
 
-    constructor(width: number, height: number, interationIntervall = 100) {
+    constructor(config: Configuration2D) {
         this.canvas = document.getElementById('canvas') as HTMLCanvasElement
-        this.cellSize = Math.round(Math.min(this.canvas.height, this.canvas.width) / Math.max(width, height))
+        this.cellSize = Math.round(Math.min(this.canvas.height, this.canvas.width) / Math.max(config.universe.width, config.universe.height))
         this.context = this.canvas.getContext("2d") as CanvasRenderingContext2D
-        this.width = width
-        this.height = height
-        this.interationIntervall = interationIntervall
+        this.width = config.universe.width
+        this.height = config.universe.height
+        this.interationIntervall = config.delay_ms
         this.interval = null
-        this.universe = new Universe2D(this.width, this.height)
-        this.algorithm = new EvolutionAlgorithm<Cell2D>(this.universe, new EEFFRule(2, 3, 3, 3))
+        this.universe = config.universe
+        this.algorithm = new EvolutionAlgorithm<Cell2D>(this.universe, config.rule)
     }
 
     draw() {
