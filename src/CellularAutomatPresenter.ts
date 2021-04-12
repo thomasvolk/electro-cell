@@ -66,9 +66,10 @@ export class CellularAutomatPresenter {
 
     start() {
         if (!this.isRunning()) {
+            const algorithm = this.config.newAlgorithm()
             this.interval = setInterval(()=> { 
                 this.draw()
-                this.config.algorithm.iterate()
+                algorithm.iterate()
             }, this.config.delay_ms);
         }
     }

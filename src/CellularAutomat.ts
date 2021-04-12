@@ -240,13 +240,11 @@ export class Configuration {
     universe: Universe
     rule: Rule
     delay_ms: number
-    algorithm: EvolutionAlgorithm
 
     constructor(universe: Universe, rule: Rule, delay_ms: number) {
         this.universe = universe
         this.rule = rule
         this.delay_ms = delay_ms
-        this.algorithm = new EvolutionAlgorithm(this.universe, this.rule)
     }
 
     toObject(): Object {
@@ -255,6 +253,10 @@ export class Configuration {
             rule: this.rule.toObject(),
             delay_ms: this.delay_ms
         }
+    }
+
+    newAlgorithm(): EvolutionAlgorithm {
+        return new EvolutionAlgorithm(this.universe, this.rule)
     }
 
     static fromObject(cfg: any): Configuration {
