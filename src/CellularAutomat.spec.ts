@@ -1,19 +1,19 @@
 import { expect, assert } from 'chai';
 import {
-    Universe2D, 
+    Universe, 
     EEFFRule, 
-    Cell2D
+    Cell
 } from "./CellularAutomat";
 
 describe('Universe2D', () => {
     it('should initialize properly', () => {
-        const u = new Universe2D(20, 20);
+        const u = new Universe(20, 20);
         expect(u.width).to.equal(20)
         expect(u.height).to.equal(20)
         expect(u.getCells().length).to.equal(400)
     });
     it('should calculate the neighbours of a cell correctly', () => { 
-        const u = new Universe2D(20, 20);
+        const u = new Universe(20, 20);
         
         const testData = 
         [
@@ -51,7 +51,7 @@ describe('Universe2D', () => {
             const neighbours = cell.getNeighbours()
             expect(neighbours.length).to.equal(8)
             testSet.neighbours.forEach(([number, nx, ny]) => {
-                const n = neighbours[number] as Cell2D
+                const n = neighbours[number]
                 expect(n.getX(), `cell(x=${x}, y=${y}) number=${number} nx=${nx}`).to.equal(nx)
                 expect(n.getY(), `cell(x=${x}, y=${y}) number=${number} ny=${ny}`).to.equal(ny)
             });
@@ -73,11 +73,11 @@ describe('cycle function', () => {
             [-12, 10, 8]
         ]
         testData.forEach(([value, max, expected]) => {
-            expect(Universe2D.cycle(value, max), 
+            expect(Universe.cycle(value, max), 
               `cycle(${value}, ${max})`).to.equal(expected) 
         });
         
-        assert(isNaN(Universe2D.cycle(0,   0)), "cycle(0,   0) = NaN")
+        assert(isNaN(Universe.cycle(0,   0)), "cycle(0,   0) = NaN")
     });
 });
 

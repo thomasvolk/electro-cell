@@ -32,13 +32,13 @@ import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.css';
 import $ from "jquery";
 import {
-    CellularAutomat2DPresenter
-} from "./CellularAutomat2DPresenter";
+    CellularAutomatPresenter
+} from "./CellularAutomatPresenter";
 import { ipcRenderer } from "electron";
-import { Configuration2D, EEFFRule, Universe2D } from './CellularAutomat';
+import { Configuration, EEFFRule, Universe } from './CellularAutomat';
 
-const startConfig = new Configuration2D(new Universe2D(300, 300), new EEFFRule(2, 3, 3, 3), 1)
-var ca = new CellularAutomat2DPresenter(startConfig)
+const startConfig = new Configuration(new Universe(300, 300), new EEFFRule(2, 3, 3, 3), 1)
+var ca = new CellularAutomatPresenter(startConfig)
 
 $('#start-stop-button').on("click", () => {
     if(ca.isRunning()) {
@@ -104,7 +104,7 @@ async function openFile() {
     }
     else {
         try {
-            const fileConfig = Configuration2D.fromObject(JSON.parse(result.content))
+            const fileConfig = Configuration.fromObject(JSON.parse(result.content))
             ca.reset(fileConfig)
             statusBar.success(result.message)
             $('#start-stop-button').text("Start")

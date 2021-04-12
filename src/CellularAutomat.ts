@@ -2,17 +2,37 @@ interface Serializable {
     toObject(): Object
 }
 
-class Cell {
+export class Cell {
     private value: number
     private newValue: number
     private hasChanged: boolean
     private neighbours: Array<Cell>
-
-    constructor() {
+    private x: number
+    private y: number
+    
+    constructor(x: number, y: number) {
+        this.x = x
+        this.y = y
         this.value = 0
         this.newValue = 0
         this.hasChanged = false
         this.neighbours = new Array<Cell>()
+    }
+
+    toObject(): Object {
+        return { 
+            x: this.x,
+            y: this.y,
+            v: this.getValue()
+         }
+    }
+    
+    getX(): number {
+        return this.x
+    }
+    
+    getY(): number {
+        return this.y
     }
 
     getValue(): number {
@@ -53,64 +73,20 @@ class Cell {
     }
 }
 
-export class Cell2D extends Cell implements Serializable {
-
-    private x: number
-    private y: number
-
-    
-    constructor(x: number, y: number) {
-        super()
-        this.x = x
-        this.y = y
-    }
-
-    toObject(): Object {
-        return { 
-            x: this.x,
-            y: this.y,
-            v: this.getValue()
-         }
-    }
-    
-    getX(): number {
-        return this.x
-    }
-    
-    getY(): number {
-        return this.y
-    }
-}
-
-abstract class Universe<C extends Cell> implements Serializable {
-    abstract toObject(): Object 
-    
-    abstract getCells(): Array<C>
-    
-    getValue(): number {
-        return this.getCells().reduce((sum, cell) => sum + cell.getValue(), 0)
-    }
-
-    reset() {
-        this.getCells().forEach(c => c.reset())
-    }
-}
-
-export class Universe2D extends Universe<Cell2D> {
-    private cells: Array<Cell2D>
+export class Universe {
+    private cells: Array<Cell>
     width: number
     height: number
     endless: boolean
     
     constructor(width: number, height: number, endless: boolean = true) {
-        super()
         this.width = width
         this.height = height
         this.endless = endless
         this.cells = []
         for (var y = 0; y < height; y++) {
             for (var x = 0; x < width; x++) {
-                this.cells.push(new Cell2D(x, y))
+                this.cells.push(new Cell(x, y))
             }
         }
         for (let cell of this.cells) {
@@ -129,8 +105,8 @@ export class Universe2D extends Universe<Cell2D> {
         }
     }
     
-    static fromObject(obj: any): Universe2D {
-        const u = new Universe2D(obj.width, obj.height);
+    static fromObject(obj: any): Universe {
+        const u = new Universe(obj.width, obj.height);
         u.reset();
         (obj.cells as Array<any>).forEach((c) => {
             const cell = u.getCell(c.x, c.y)
@@ -154,21 +130,21 @@ export class Universe2D extends Universe<Cell2D> {
         return this.endless || x > 0 && x < this.width && y > 0 && y < this.height
     }
 
-    getCell(x: number, y: number): Cell2D {
-        const cx = Universe2D.cycle(x, this.width)
-        const cy = Universe2D.cycle(y, this.height)
+    getCell(x: number, y: number): Cell {
+        const cx = Universe.cycle(x, this.width)
+        const cy = Universe.cycle(y, this.height)
         const i = cx + cy * this.width
         return this.cells[i]
     }
 
-    getCells(): Array<Cell2D> {
+    getCells(): Array<Cell> {
         return this.cells
     }
 
-    private getNeighbours(cell: Cell2D): Array<Cell2D> {
+    private getNeighbours(cell: Cell): Array<Cell> {
         const x = cell.getX()
         const y = cell.getY()
-        const neighbours = new Array<Cell2D>()
+        const neighbours = new Array<Cell>()
         for(var ny = -1; ny < 2; ny++) {
             for(var nx = -1; nx < 2; nx++) {
                 if(!(nx == 0 && ny == 0) && this.isInside(nx, ny)) {
@@ -179,6 +155,13 @@ export class Universe2D extends Universe<Cell2D> {
         return neighbours
     }
 
+    getValue(): number {
+        return this.getCells().reduce((sum, cell) => sum + cell.getValue(), 0)
+    }
+
+    reset() {
+        this.getCells().forEach(c => c.reset())
+    }
 }
 
 export interface Rule extends Serializable {
@@ -235,11 +218,11 @@ export class EEFFRule implements Rule {
     }
 }
 
-export class EvolutionAlgorithm<C extends Cell> {
-    private universe: Universe<C>
+export class EvolutionAlgorithm {
+    private universe: Universe
     private rule: Rule
 
-    constructor(universe: Universe<C>, rule: Rule) {
+    constructor(universe: Universe, rule: Rule) {
         this.universe = universe
         this.rule = rule
     }
@@ -253,17 +236,17 @@ export class EvolutionAlgorithm<C extends Cell> {
     }
 }
 
-export class Configuration2D {
-    universe: Universe2D
+export class Configuration {
+    universe: Universe
     rule: Rule
     delay_ms: number
-    algorithm: EvolutionAlgorithm<Cell2D>
+    algorithm: EvolutionAlgorithm
 
-    constructor(universe: Universe2D, rule: Rule, delay_ms: number) {
+    constructor(universe: Universe, rule: Rule, delay_ms: number) {
         this.universe = universe
         this.rule = rule
         this.delay_ms = delay_ms
-        this.algorithm = new EvolutionAlgorithm<Cell2D>(this.universe, this.rule)
+        this.algorithm = new EvolutionAlgorithm(this.universe, this.rule)
     }
 
     toObject(): Object {
@@ -274,9 +257,9 @@ export class Configuration2D {
         }
     }
 
-    static fromObject(cfg: any): Configuration2D {
-        return new Configuration2D(
-            Universe2D.fromObject(cfg.universe),
+    static fromObject(cfg: any): Configuration {
+        return new Configuration(
+            Universe.fromObject(cfg.universe),
             EEFFRule.fromObject(cfg.rule),
             cfg.delay_ms
         )

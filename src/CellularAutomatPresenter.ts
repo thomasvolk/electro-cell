@@ -1,17 +1,17 @@
 import { config } from "chai";
 import {
-    Configuration2D,
+    Configuration,
 } from "./CellularAutomat";
 
 
-export class CellularAutomat2DPresenter {
+export class CellularAutomatPresenter {
     private canvas: HTMLCanvasElement
     private context: CanvasRenderingContext2D
     private cellSize: number
     private interval: any
-    private config: Configuration2D
+    private config: Configuration
 
-    constructor(config: Configuration2D) {
+    constructor(config: Configuration) {
         this.reset(config)
     }
 
@@ -33,7 +33,7 @@ export class CellularAutomat2DPresenter {
         }
     }
 
-    getConfig(): Configuration2D {
+    getConfig(): Configuration {
         return this.config
     }
 
@@ -49,7 +49,7 @@ export class CellularAutomat2DPresenter {
         }
     }
 
-    reset(config: Configuration2D = null) {
+    reset(config: Configuration = null) {
         this.stop()
         if(config != null) {
             this.config = config
