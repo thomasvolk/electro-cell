@@ -1,4 +1,3 @@
-import { config } from "chai";
 import {
     Configuration,
 } from "./CellularAutomat";
