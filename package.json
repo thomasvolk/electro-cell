@@ -69,7 +69,7 @@
     "@electron-forge/maker-rpm": "^6.0.0-beta.54",
     "@electron-forge/maker-squirrel": "^6.0.0-beta.54",
     "@electron-forge/maker-zip": "^6.0.0-beta.54",
-    "@electron-forge/plugin-webpack": "6.0.0-beta.54",
+    "@electron-forge/plugin-webpack": "^6.0.0-beta.58",
     "@marshallofsound/webpack-asset-relocator-loader": "^0.5.0",
     "@types/bootstrap": "^5.0.12",
     "@types/chai": "^4.2.15",
@@ -95,6 +95,7 @@
     "cellular-automat": "^1.0.0",
     "electron-squirrel-startup": "^1.0.0",
     "jquery": "^3.6.0",
-    "popper.js": "^1.16.1"
+    "popper.js": "^1.16.1",
+    "yarn": "^1.22.10"
   }
 }
