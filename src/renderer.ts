@@ -32,20 +32,24 @@ import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.css';
 import $ from "jquery";
 import { ipcRenderer } from "electron";
-import { CellularAutomat, Configuration, EEFFRule, Universe } from 'cellular-automat';
+import { CellularAutomat, JsonFormat, Configuration, EEFFRule, Universe } from 'cellular-automat';
 
 const canvas = document.getElementById('canvas') as HTMLCanvasElement
-var config = new Configuration(new Universe(300, 300), new EEFFRule(2, 3, 3, 3), 1)
+var config = new Configuration(new Universe(300, 300), new EEFFRule(2, 3, 3, 3))
 var ca = new CellularAutomat(canvas, config)
 
 $('#start-stop-button').on("click", () => {
     if(ca.isRunning()) {
         ca.stop()
         $('#start-stop-button').text("Start")
+        $('#delay-range').removeAttr('disabled')
+        $('#shuffle-button').removeAttr('disabled')
     }
     else {
-        ca.start()
+        ca.start(Number($('#delay-range').val()))
         $('#start-stop-button').text("Stop")
+        $('#delay-range').attr('disabled', 'true')
+        $('#shuffle-button').attr('disabled', 'true')
     }
 })
 
@@ -86,7 +90,7 @@ class StatusBar {
 const statusBar = new StatusBar('#status-bar')
 
 async function saveFile(type: string) {
-    const result = await ipcRenderer.invoke('save-file', type, JSON.stringify(config.toObject()))
+    const result = await ipcRenderer.invoke('save-file', type, new JsonFormat().encode(config))
     if(result.error) {
         statusBar.danger(result.message)
     }
@@ -103,7 +107,7 @@ async function openFile() {
     else {
         try {
             ca.stop()
-            config = Configuration.fromObject(JSON.parse(result.content))
+            config = new JsonFormat().decode(result.content)
             ca = new CellularAutomat(canvas, config)
             ca.draw()
             statusBar.success(result.message)
