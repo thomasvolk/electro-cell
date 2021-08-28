@@ -32,7 +32,7 @@ import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.css';
 import $ from "jquery";
 import { ipcRenderer } from "electron";
-import { CellularAutomat, JsonFormat, Configuration, EEFFRule, Universe } from 'cellular-automat';
+import { CellularAutomat, RleFormat, Configuration, EEFFRule, Universe } from 'cellular-automat';
 
 const canvas = document.getElementById('canvas') as HTMLCanvasElement
 var config = new Configuration(new Universe(300, 300), new EEFFRule(2, 3, 3, 3))
@@ -90,7 +90,7 @@ class StatusBar {
 const statusBar = new StatusBar('#status-bar')
 
 async function saveFile(type: string) {
-    const result = await ipcRenderer.invoke('save-file', type, new JsonFormat().encode(config))
+    const result = await ipcRenderer.invoke('save-file', type, new RleFormat().encode(config))
     if(result.error) {
         statusBar.danger(result.message)
     }
@@ -107,8 +107,9 @@ async function openFile() {
     else {
         try {
             ca.stop()
-            config = new JsonFormat().decode(result.content)
+            config = new RleFormat().decode(result.content)
             ca = new CellularAutomat(canvas, config)
+            ca.clear()
             ca.draw()
             statusBar.success(result.message)
             $('#start-stop-button').text("Start")
