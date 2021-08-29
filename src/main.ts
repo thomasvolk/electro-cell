@@ -57,7 +57,7 @@ app.on('activate', () => {
 
 class FileService {
   private dialogFiters = [
-    { name: 'pattern', extensions: ['json'] },
+    { name: 'rle', extensions: ['rle', 'RLE'] },
     { name: 'All Files', extensions: ['*'] }
   ] 
   private path: string
