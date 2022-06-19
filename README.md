@@ -17,9 +17,3 @@ run app:
 package application:
 
     yarn package
-
-## development
-
-run the unittests:
-
-    npm test
