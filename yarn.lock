@@ -539,13 +539,12 @@
   dependencies:
     "@types/node" "*"
 
-"@types/bootstrap@^5.0.12":
-  version "5.1.2"
-  resolved "https://registry.yarnpkg.com/@types/bootstrap/-/bootstrap-5.1.2.tgz#24f08f1957ff5859633f4bf620e921d296e6c3a2"
-  integrity sha512-dSQvMi2dMyNwJU6LZjP0pimuBowsMUvGScYdfqqeiDUoj9TxXZCpfu0cTl94U0Zvw/tdH9j/9ToOhi4LKNLZhg==
+"@types/bootstrap@^5.1.12":
+  version "5.1.12"
+  resolved "https://registry.yarnpkg.com/@types/bootstrap/-/bootstrap-5.1.12.tgz#4d704f6385fda2f1a56cc458f1f4cafab6e9f7e3"
+  integrity sha512-pSS5BGEgepwzdbsBGswBWFmgrnYpp7c4UfuYe1FJWwkrcjm/JVwfG4gBkOYtd92Otd3RdJK0ByBWMkBROfLEPw==
   dependencies:
     "@popperjs/core" "^2.9.2"
-    "@types/jquery" "*"
 
 "@types/cacheable-request@^6.0.1":
   version "6.0.2"
@@ -653,13 +652,6 @@
   integrity sha512-QsbSjA/fSk7xB+UXlCT3wHBy5ai9wOcNDWwZAtud+jXhwOM3l+EYZh8Lng4+/6n8uar0J7xILzqftJdJ/Wdfkw==
   dependencies:
     "@types/node" "*"
-
-"@types/jquery@*":
-  version "3.5.6"
-  resolved "https://registry.yarnpkg.com/@types/jquery/-/jquery-3.5.6.tgz#97ac8e36dccd8ad8ed3f3f3b48933614d9fd8cf0"
-  integrity sha512-SmgCQRzGPId4MZQKDj9Hqc6kSXFNWZFHpELkyK8AQhf8Zr6HKfCzFv9ZC1Fv3FyQttJZOlap3qYb12h61iZAIg==
-  dependencies:
-    "@types/sizzle" "*"
 
 "@types/jquery@^3.5.14":
   version "3.5.14"
