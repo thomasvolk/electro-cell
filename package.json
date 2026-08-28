@@ -20,7 +20,11 @@
   "license": "Apache-2.0",
   "resolutions": {
     "cross-spawn": "^7.0.6",
-    "webpack-dev-server": "^5.2.6"
+    "webpack-dev-server": "^5.2.6",
+    "tar": "^7.5.22",
+    "tmp": "^0.2.7",
+    "uuid": "^11.1.1",
+    "serialize-javascript": "^7.0.5"
   },
   "config": {
     "forge": {
@@ -82,7 +86,7 @@
     "@typescript-eslint/parser": "^8.44.0",
     "chai": "^6.0.1",
     "css-loader": "^7.1.2",
-    "electron": "41.5.0",
+    "electron": "41.10.7",
     "eslint": "^9.36.0",
     "eslint-plugin-import": "^2.32.0",
     "fork-ts-checker-webpack-plugin": "^9.1.0",
